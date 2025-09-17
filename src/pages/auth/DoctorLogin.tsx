@@ -37,41 +37,58 @@ export default function DoctorLogin() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex items-stretch">
+    <div className="min-h-screen w-full bg-gray-50 md:bg-gradient-to-br md:from-slate-50 md:via-white md:to-teal-50 flex items-stretch">
       {/* Lado izquierdo con imagen */}
-      <div className="hidden md:block md:w-1/2 relative">
+      <div className="relative hidden md:block md:w-1/2">
         <img
           src="/src/images/doctor-login.jpg"
           alt="Médico"
           className="absolute inset-0 h-full w-full object-cover"
         />
+        {/* Capa de color para coherencia de marca */}
+        <div className="absolute inset-0 bg-teal-900/10 mix-blend-multiply" aria-hidden />
+        {/* Logo SRM (arriba-izquierda sobre la imagen) */}
+        <Link
+          to="/"
+          className="absolute left-5 top-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/25 backdrop-blur-sm hover:bg-white/15 transition"
+          aria-label="SRM - Inicio"
+          title="SRM"
+        >
+          <img
+            src="/src/images/logo_med_shield.png"
+            onError={(e) => {
+              const img = e.currentTarget as HTMLImageElement;
+              if (!img.dataset.fallback) { img.dataset.fallback = "1"; img.src = "/logo-srm.png"; }
+            }}
+            alt="Logo SRM"
+            className="h-8 w-8 object-contain drop-shadow"
+          />
+        </Link>
         {/* curva suave a la derecha */}
-        <div className="absolute -right-12 top-0 h-full w-24 bg-gray-50 rounded-l-[48px]" />
+        <div className="absolute -right-12 top-0 h-full w-24 bg-gray-50 rounded-l-[48px]" aria-hidden />
       </div>
 
       {/* Lado derecho: formulario */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          {/* Encabezado con icono médico */}
+          {/* Encabezado con logo SRM */}
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 h-14 w-14 rounded-2xl ring-1 ring-teal-600/20 flex items-center justify-center">
-              {/* Ícono caduceo simple */}
-              <svg
-                viewBox="0 0 24 24"
-                className="h-9 w-9 text-teal-600"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              >
-                <path d="M12 2v20M7 6h10M8 10c0 2.5 1.79 4.5 4 4.5s4-2 4-4.5" />
-                <path d="M7 14c0 3 2.24 5 5 5s5-2 5-5" />
-              </svg>
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-white ring-1 ring-teal-600/20 shadow-sm">
+              <img
+                src="/src/images/logo_med_shield.png"
+                onError={(e) => {
+                  const img = e.currentTarget as HTMLImageElement;
+                  if (!img.dataset.fallback) { img.dataset.fallback = "1"; img.src = "/logo-srm.png"; }
+                }}
+                alt="SRM"
+                className="h-10 w-10 object-contain"
+              />
             </div>
             <h1 className="text-2xl font-bold text-teal-700">¡Bienvenido de nuevo!</h1>
-            <p className="text-sm text-gray-500">Listo para salvar vidas? Ingrese sus credenciales.</p>
+            <p className="text-sm text-gray-500">Ingrese sus credenciales para continuar.</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5 rounded-[20px] bg-white p-6 shadow ring-1 ring-gray-200">
             <div>
               <label className="block text-sm font-medium text-gray-700">Correo</label>
               <input
@@ -79,7 +96,7 @@ export default function DoctorLogin() {
                 autoComplete="email"
                 required
                 placeholder="nombre.apellido@doctor.com"
-                className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="mt-1 w-full rounded-full border border-gray-300 bg-white px-4 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-600"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -92,15 +109,16 @@ export default function DoctorLogin() {
                   type={showPass ? "text" : "password"}
                   autoComplete="current-password"
                   required
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 pr-10 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full rounded-full border border-gray-300 bg-white px-4 py-2 pr-12 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-600"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-2 flex items-center"
+                  className="absolute inset-y-0 right-3 flex items-center text-slate-500 hover:text-slate-700"
                   onClick={() => setShowPass((s) => !s)}
                   aria-label={showPass ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  title={showPass ? "Ocultar contraseña" : "Mostrar contraseña"}
                 >
                   {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -111,7 +129,7 @@ export default function DoctorLogin() {
               <label className="inline-flex items-center gap-2">
                 <input
                   type="checkbox"
-                  className="rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                  className="rounded border-gray-300 text-teal-600 focus:ring-teal-600"
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
@@ -131,7 +149,7 @@ export default function DoctorLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-full bg-teal-700 py-2.5 text-white font-semibold shadow hover:bg-teal-800 disabled:opacity-60"
+              className="w-full rounded-full bg-teal-700 py-2.5 text-white font-semibold shadow hover:bg-teal-800 active:scale-[.99] disabled:opacity-60"
             >
               {loading ? "Ingresando..." : "Iniciar Sesión"}
             </button>
